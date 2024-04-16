@@ -1,0 +1,31 @@
+consult(autorClass.pl).
+consult(buchTypClass.pl).
+consult(buchClass.pl).
+consult(studentClass.pl).
+consult(buchungClass.pl).
+consult(verleihenClass.pl).
+consult(verwaltung.pl).
+
+process_delete_options(0):-
+	main_menu.
+process_delete_options(1):-
+	writeln('Please type in the ID of the author to delete: '),
+	read(Id),
+	delete_autor(Id).
+process_delete_options(2):-
+	writeln('Please type in the ID of the book type to delete: '),
+	read(Id),
+	delete_typ(Id).
+process_delete_options(3):-
+	writeln('1 - To delete a book with ID.'),
+    writeln('2 - To delete a book with ISBN.'),
+    read(Number),
+    process_delete_buch(Number).
+process_delete_options(4):-
+	writeln('Please type in the MatrikelNr. of the student to delete: '),
+	read(MatrikelNr),
+	delete_student(MatrikelNr).
+process_delete_options(5):-
+	writeln('Please type in the ID of the room to delete: '),
+	read(Id),
+	delete_zimmer(Id).

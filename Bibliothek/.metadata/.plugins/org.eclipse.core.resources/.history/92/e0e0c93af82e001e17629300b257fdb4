@@ -1,0 +1,12 @@
+include('connectionClass.pl').
+
+% Check connection
+test_connection:-
+	connection,
+	disconnect.
+	
+% Test if the data is coming from database
+test_data:-
+	connection,
+	studenten,
+	disconnect.

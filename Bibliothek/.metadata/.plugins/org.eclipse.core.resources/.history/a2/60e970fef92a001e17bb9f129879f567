@@ -1,0 +1,31 @@
+% Simple select
+verleihDaten():-
+	findall(Rows, odbc_query(mydb, 'SELECT v.id, s.vorname, s.nachname, b.name, v.verleihDatum, v.abgabeDatum FROM verleihung INNER JOIN student s ON v.matrikelNr = s.matrikelNr INNER JOIN buch b ON v.buch = b.id', Rows), All),
+	writeln(All).
+
+% Buch vorhanden
+buch_vorhanden(BuchId, Vorhanden):-
+	atomic_list_concat(['SELECT vorhanden FROM buch WHERE id = ' , BuchId,''], Query),
+    odbc_query(mydb, Query, Rows),
+	Rows = row(Vorhanden).
+
+% Book booking
+update_vorhanden(Buch, NewVorhanden) :-
+    atomic_list_concat(['UPDATE buch SET vorhanden = ', NewVorhanden, ' WHERE id = ', Buch], Query),
+    odbc_query(mydb, Query).
+	
+% Take Book
+buch_ausleihen(MatrikelNr, Buch) :-
+    buch_vorhanden(Buch, Vorhanden),
+    (Vorhanden =:= 1 ->
+        atomic_list_concat(['INSERT INTO verleihung(matrikelNr, buch, verleihDatum, abgabeDatum) VALUES (?, ?, NOW(), NOW() + INTERVAL 1 MONTH)'], Query),
+        odbc_prepare(mydb, Query, [integer, integer], Statement),
+        odbc_execute(Statement, [MatrikelNr, Buch]),
+        update_vorhanden(Buch, 0)
+    ;
+        writeln('The book is not available for borrowing.')
+    ).
+
+% Give back Book
+buch_abgabe(Buch):-
+	update_vorhanden(Buch,1).

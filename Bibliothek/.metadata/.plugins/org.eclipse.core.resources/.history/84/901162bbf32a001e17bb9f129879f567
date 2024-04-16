@@ -1,0 +1,71 @@
+consult(autorClass.pl).
+consult(buchTypClass.pl).
+consult(buchClass.pl).
+consult(studentClass.pl).
+consult(buchungClass.pl).
+consult(verleihenClass.pl).
+consult(verwaltung.pl).
+
+process_insert_options(0):-
+    main_menu.
+process_insert_options(1):-
+    writeln('Please insert the first name of the author: '),
+    read_line_without_quotes(Vorname),
+    writeln('Please insert the last name of the author: '),
+    read_line_without_quotes(Nachname),
+    insert_autor(Vorname, Nachname),
+    writeln('Author inserted successfully!\n'),
+    process_option(2).
+
+process_insert_options(2):-
+    writeln('Please insert the type of the book: '),
+    read_line_without_quotes(Name),
+    insert_typ(Name),
+    writeln('Book type inserted successfully!\n'),
+    process_option(2).
+
+process_insert_options(3):-
+    writeln('Please insert the name of the book: '),
+    read_line_without_quotes(Name),
+    writeln('Please insert the ID of the author: '),
+    read(ID_Autor),
+    writeln('Please insert the ID of the book type: '),
+    read(ID_Typ),
+    writeln('Please insert the ISBN of the book: '),
+    read(ISBN),
+    insert_buch(Name, ID_Autor, ID_Typ, ISBN),
+    writeln('Book inserted successfully!\n'),
+    process_option(2).
+
+process_insert_options(4):-
+    writeln('Please insert the matrikel nummer of the student: '),
+    read(MatrikelNr),
+    writeln('Please insert the first name of the student: '),
+    read_line_without_quotes(Vorname),
+    writeln('Please insert the last name of the student: '),
+    read_line_without_quotes(Nachname),
+    insert_student(MatrikelNr, Vorname, Nachname),
+    writeln('Student inserted successfully!\n'),
+    process_option(2).
+
+process_insert_options(5):-
+    writeln('Please insert the room number: '),
+    read(Nummer),
+    writeln('Please insert the floor of the room: '),
+    read(Etage),
+    insert_zimmer(Nummer, Etage),
+    writeln('Room inserted successfully!\n'),
+    process_option(2).
+
+read_line_without_quotes(Text) :-
+    get_line(Stream, Line),
+    atom_string(Text, Line).
+
+get_line(Stream, Line) :-
+    get_code(Stream, Char),
+    get_line(Stream, Char, [], Line).
+
+get_line(_, -1, Line, Line) :- !.  % End of File
+get_line(_, 10, Line, Line) :- !.  % Newline character
+get_line(Stream, Char, TempLine, Line) :-
+    get_line(Stream, Char, [Char | TempLine], Line).

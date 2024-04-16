@@ -1,0 +1,64 @@
+% To add sample data in database
+sample_data:-
+	connection,
+	insert_autoren,
+	insert_buchtypen,
+	insert_buecher,
+	insert_studenten,
+	insert_zimmer,
+	disconnect.
+
+insert_autoren:-
+	insert_autor('Leon', 'Tolstoi'),
+	insert_autor('Stephen', 'King'),
+	insert_autor('Agatha', 'Christie'),
+	insert_autor('Stephan', 'Kleuker'),
+	insert_autor('Charles', 'Dickens'),
+	insert_autor('J. R. R.', 'Tolkien'),
+	insert_autor('Ernest', 'Hemingway'),
+	insert_autor('William', 'Shakespeare'),
+	insert_autor('Mark', 'Twain'),
+	insert_autor('Friedrich', 'Nietzsche').
+
+insert_buchtypen:-
+	insert_typ('Krimi'),
+	insert_typ('Thriller'),
+	insert_typ('Roman'),
+	insert_typ('Science Fiction'),
+	insert_typ('Fantasy'),
+	insert_typ('Horror'),
+	insert_typ('Fachbuch'),
+	insert_typ('Autobiografie'),
+	insert_typ('Komödie').
+
+insert_buecher:-
+	insert_buch('Anna Karenina', 1, 3, 323864),
+	insert_buch('The Shining', 2, 6, 128917),
+	insert_buch('Murder on the Orient Express', 3, 1, 383237),
+	insert_buch('Qualitätssicherung durch Softwaretests', 4, 7, 275422),
+	insert_buch('Oliver Twist', 5, 2, 362746),
+	insert_buch('The Lord of the Rings', 6, 4, 427462),
+	insert_buch('Men without Women', 7, 5, 428462),
+	insert_buch('The Merchant of Venice', 8, 9, 893191),
+	insert_buch('Adventures of Huckleberry Finn', 9, 5, 738273),
+	insert_buch('Ecce homo: Wie man wird, was man ist', 10, 8, 8932793).
+
+insert_studenten:-
+	insert_student(424221, 'Malik Shameer', 'Riaz'),
+	insert_student(372231, 'Finn', 'Christophersen'),
+	insert_student(919533, 'Yadullah Abdul', 'Sattar'),
+	insert_student(328812, 'Malik Bhangash', 'Maghsi'),
+	insert_student(847742, 'Gulab', 'Chandio'),
+	insert_student(122311, 'Lukas', 'Trachsel').
+
+insert_zimmer:-
+	insert_zimmer(001, 0),
+	insert_zimmer(002, 0),
+	insert_zimmer(003, 0),
+	insert_zimmer(004, 0),
+	insert_zimmer(005, 0),
+	insert_zimmer(101, 1),
+	insert_zimmer(102, 1),
+	insert_zimmer(103, 1),
+	insert_zimmer(104, 1),
+	insert_zimmer(201, 2).

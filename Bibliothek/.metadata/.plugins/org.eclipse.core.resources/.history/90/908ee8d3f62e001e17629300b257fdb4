@@ -1,0 +1,7 @@
+include('connectionClass.pl').
+
+% Check connection
+test_connection:-
+	connection.
+test_disconnect:-
+	disconnect.

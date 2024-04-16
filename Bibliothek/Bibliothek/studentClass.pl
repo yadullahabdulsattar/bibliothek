@@ -1,0 +1,19 @@
+% Simple select
+studenten():-
+	findall(Rows, odbc_query(mydb, 'SELECT * FROM student', Rows), All),
+	writeln(All).
+
+% Insert Student
+insert_student(MatrikelNr, Vorname, Nachname) :-
+    atomic_list_concat(['INSERT INTO student(matrikelNr, vorname, nachname) VALUES (',MatrikelNr,', \'', Vorname, '\', \'', Nachname, '\')'], Query),
+    odbc_query(mydb, Query),
+    writeln('Student added successfully!'),
+    !.
+	
+% Delete Student
+% Predicate to delete the student by ID
+delete_student(MatrikelNr) :-
+    atomic_list_concat(['DELETE FROM student WHERE matrikelNr = ', MatrikelNr], Query),
+    odbc_query(mydb, Query),
+    writeln('Deletion successful.'),
+    process_option(5).

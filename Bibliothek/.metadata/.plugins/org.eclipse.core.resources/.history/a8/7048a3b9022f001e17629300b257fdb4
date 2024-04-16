@@ -1,0 +1,28 @@
+include('connectionClass.pl').
+
+% Check connection
+test_connection:-
+	connection,
+	disconnect.
+	
+% Test if the data is coming from database
+test_data:-
+	connection,
+	studenten,
+	disconnect.
+	
+% Test if the insert predicate is working
+test_insert:-
+	connection,
+	insert_buch('test book', 1, 1, 123456),
+	disconnect.
+	
+% Test if the delete predicate is working
+test_insert:-
+	connection,
+	delete_buch_mitISBN(123456),
+	disconnect.
+	
+% Check if the room booking system is working
+
+% Check if the book lending is working

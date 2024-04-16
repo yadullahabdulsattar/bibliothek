@@ -1,0 +1,124 @@
+:- use_module(library(odbc)).
+
+% Load the other Prolog files
+include('connectionClass.pl').
+include('selectQueries.pl').
+include('insertQueries.pl').
+include('buchungClass.pl').
+include('verleihenClass.pl').
+include('deleteQueries.pl').
+
+read_option(Number) :-
+    catch(read_line(Line), _, (writeln('Invalid input.'), read_option(Number))),
+    number_string(Number, Line).
+
+% User Friendly Program
+start_bibliothek_program:-
+	connection,
+    writeln('Welcome to the Library Management System!!!'),
+    main_menu.
+    
+main_menu:-
+    writeln('Please select one of the options below:'),
+    writeln('0 - Exit Program.'),
+    writeln('1 - To see the data.'),
+    writeln('2 - Insert data.'),
+    writeln('3 - Book borrowing.'),
+    writeln('4 - Room booking.'),
+    writeln('5 - Delete data.'),
+    read_option(Number),
+    process_option(Number).
+
+process_option(0):-
+    writeln('Exiting the Library Management System.'),
+    writeln('Goodbye!'),
+    disconnect.
+
+process_option(1):-
+    writeln('Please select one of the options below:'),
+    writeln('0 - To go back.'),
+    writeln('1 - To see all the authors.'),
+    writeln('2 - To see all the book types.'),
+    writeln('3 - To see all the books.'),
+    writeln('4 - To see all the students.'),
+    writeln('5 - To see all the rooms.'),
+    writeln('6 - To see all the rooms bookings.'),
+    writeln('7 - To see all the books bookings.'),
+    read_option(Number),
+    process_see_options(Number).
+
+process_option(2):-
+    writeln('Please select one of the options below:\n'),
+    writeln('0 - To go back.'),
+    writeln('1 - To insert an author.'),
+    writeln('2 - To insert a book type.'),
+    writeln('3 - To insert a book.'),
+    writeln('4 - To insert a student.'),
+    writeln('5 - To insert a room.\n'),
+    read_option(Number),
+    process_insert_options(Number).
+
+process_option(3):-
+    writeln('Please select one of the options below:\n'),
+    writeln('0 - To go back.'),
+    writeln('1 - To borrow a book.'),
+    writeln('2 - To give back a book.'),
+    writeln('3 - All the available books.\n'),
+    read_option(Number),
+    process_ausleihen_options(Number).
+
+process_option(4):-
+    writeln('Please select one of the options below:\n'),
+    writeln('0 - To go back.'),
+    writeln('1 - To book a room.'),
+    writeln('2 - To update room status.'),
+    writeln('3 - All the available rooms.\n'),
+    read_option(Number),
+    process_buchen_options(Number).
+
+process_option(5):-
+    writeln('Please select one of the options below:\n'),
+    writeln('0 - To go back.'),
+    writeln('1 - To delete an author.'),
+    writeln('2 - To delete a book type.'),
+    writeln('3 - To delete a book.'),
+    writeln('4 - To delete a student.'),
+    writeln('5 - To delete a room.\n'),
+    read_option(Number),
+    process_delete_options(Number).
+    
+process_ausleihen_options(0):-
+	main_menu.
+process_ausleihen_options(1):-
+	writeln('Please type in the MatrikelNr. of the student: '),
+	read_option(MatrikelNr),
+	writeln('Please type in the ID of the book: '),
+	read_option(Buch),
+	buch_ausleihen(MatrikelNr, Buch),
+	process_option(3).
+process_ausleihen_options(2):-
+	writeln('Please type in the ID of the book: '),
+	read_option(Buch),
+	buch_abgabe(Buch),
+	process_option(3).
+process_ausleihen_options(3):-
+	vorhandene_buecher,
+	process_option(3).
+
+process_buchen_options(0):-
+	main_menu.
+process_buchen_options(1):-
+	writeln('Please type in the MatrikelNr. of the student: '),
+	read_option(MatrikelNr),
+	writeln('Please type in the ID of the room: '),
+	read_option(Zimmer),
+	writeln('Please type in for how many hours: '),
+	read_option(Stunden),
+	zimmer_buchen(MatrikelNr, Zimmer, Stunden),
+	process_option(4).
+process_buchen_options(2):-
+	zimmer_freigabe,
+	process_option(4).
+process_buchen_options(3):-
+	freie_zimmer,
+	process_option(4).

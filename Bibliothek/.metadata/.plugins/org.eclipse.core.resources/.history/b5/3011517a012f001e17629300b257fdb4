@@ -1,0 +1,38 @@
+% To add sample data in database
+sample_data:-
+	insert_autoren,
+	insert_buchtypen,
+	insert_buecher,
+	insert_studenten,
+	insert_zimmer.
+
+insert_autoren:-
+	insert_autor('Leon', 'Tolstoi'),
+	insert_autor('Stephen', 'King'),
+	insert_autor('Agatha', 'Christie'),
+	insert_autor('Stephan', 'Kleuker'),
+	insert_autor('Charles', 'Dickens'),
+	insert_autor('J. R. R.', 'Tolkien'),
+	insert_autor('Ernest', 'Hemingway'),
+	insert_autor('William', 'Shakespeare'),
+	insert_autor('Mark', 'Twain'),
+	insert_autor('Friedrich', 'Nietzsche').
+
+insert_buchtypen:-
+	insert_typ('Krimi'),
+	insert_typ('Thriller'),
+	insert_typ('Liebesroman'),
+	insert_typ('Science Fiction'),
+	insert_typ('Fantasy'),
+	insert_typ('Horror'),
+	insert_typ('Historischer Roman'),
+	insert_typ('Gesellschaftsroman'),
+	insert_typ('Fachbuch'),
+	insert_typ('Autobiografischer Roman').
+
+insert_buecher:-
+	
+
+insert_studenten
+
+insert_zimmer

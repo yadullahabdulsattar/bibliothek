@@ -1,0 +1,47 @@
+% Simple select
+buchTypen():-
+	findall(Rows, odbc_query(mydb, 'SELECT * FROM typ', Rows), All),
+	writeln(All).
+	
+% Insert Book Type
+insert_typ(Typname) :-
+    atomic_list_concat(['INSERT INTO typ(name) VALUES (?)'], Query),
+    odbc_prepare(mydb, Query, [varchar], Statement),
+    odbc_execute(Statement, [Typname]),
+    writeln('Book type added successfully!').
+insert_typ(Typname):-
+	writeln('Book type couldn\'t be added !').
+	
+% Delete Book Type
+process_delete_typ(1):-
+	writeln('Please type in the ID of the book type to delete: '),
+	read(Id),
+	delete_typ_mitId(Id).
+process_delete_typ(2):-
+	writeln('Please type in the name of the book type to delete: '),
+	read(Name),
+	delete_typ_mitName(Name).
+
+% Predicate to search for the book type with the given name and return the ID
+search_typ_mitName(Name, TypId) :-
+    atomic_list_concat(['SELECT id FROM typ WHERE name LIKE \'%', Name, '%\''], Query),
+    odbc_query(mydb, Query, Rows),
+    findall(Id, member(row(Id), Rows), IdList),
+    length(IdList, Len),
+    (Len = 1 -> IdList = [TypId] ; writeln('Multiple or no matching book types found for deletion.'), fail).
+
+% Predicate to delete the book type by ID
+delete_typ_mitId(Id) :-
+    atomic_list_concat(['DELETE FROM typ WHERE id = ', Id], Query),
+    odbc_query(mydb, Query),
+    writeln('Deletion successful.'),
+    process_option(5).
+
+% Main predicate that combines the search and deletion operations for name
+delete_typ_mitName(Name) :-
+    search_typ_mitName(Name, TypId),
+    delete_typ_mitId(TypId),
+    process_option(5).
+delete_typ_mitName(Name) :-
+    writeln('No matching book types found for deletion.'),
+    process_option(5).

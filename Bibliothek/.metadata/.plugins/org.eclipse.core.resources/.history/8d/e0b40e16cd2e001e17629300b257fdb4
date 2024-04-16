@@ -1,0 +1,31 @@
+consult(autorClass.pl).
+consult(buchTypClass.pl).
+consult(buchClass.pl).
+consult(studentClass.pl).
+consult(buchungClass.pl).
+consult(verleihenClass.pl).
+consult(verwaltung.pl).
+
+process_see_options(0):-
+	main_menu.
+process_see_options(1):-
+    autoren,
+    process_option(1).
+process_see_options(2):-
+    buchTypen,
+    process_option(1).
+process_see_options(3):-
+    buecher,
+    process_option(1).
+process_see_options(4):-
+    studenten,
+    process_option(1).
+process_see_options(5):-
+    zimmer,
+    process_option(1).
+process_see_options(6):-
+    buchungen,
+    process_option(1).
+process_see_options(7):-
+    verleihDaten,
+    process_option(1).

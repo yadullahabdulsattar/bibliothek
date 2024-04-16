@@ -1,0 +1,48 @@
+% Simple select
+zimmer():-
+	findall(Rows, odbc_query(mydb, 'SELECT * FROM zimmer', Rows), All),
+	writeln(All).
+
+% Insert Room
+insert_zimmer(Nummer, Etage) :-
+    atomic_list_concat(['INSERT INTO zimmer(nummer, etage) VALUES (?, ?)'], Query),
+    odbc_prepare(mydb, Query, [integer, integer], Statement),
+    odbc_execute(Statement, [Nummer, Etage]),
+    writeln('Room added successfully!'),
+    !.
+insert_zimmer(Nummer, Etage):-
+	writeln('Room couldn\'t be added !').
+	
+% Delete Room
+process_delete_zimmer(1):-
+	writeln('Please type in the ID of the room to delete: '),
+	read(Id),
+	delete_zimmer_mitId(Id).
+process_delete_zimmer(2):-
+	writeln('Please type in the number of the room to delete: '),
+	read(Nummer),
+	delete_zimmer_mitNummer(Nummer).
+
+%Predicate to search for the room with the given number and return the ID
+search_zimmer_mitNummer(Nummer, Id) :-
+    atomic_list_concat(['SELECT id FROM zimmer WHERE nummer = ', Nummer], Query),
+    odbc_query(mydb, Query, Rows),
+    Rows = row(Id),
+    !.
+
+% Predicate to delete the room by ID
+delete_zimmer_mitId(Id) :-
+    atomic_list_concat(['DELETE FROM zimmer WHERE id = ', Id], Query),
+    odbc_query(mydb, Query),
+    writeln('Deletion successful.'),
+    process_option(5).
+
+% Main predicate that combines the search and deletion operations
+delete_zimmer_mitNummer(Nummer) :-
+    search_zimmer_mitNummer(Nummer, Id),
+    !,
+    delete_zimmer_mitId(Id),
+    process_option(5).
+delete_zimmer_mitNummer(Nummer) :-
+    writeln('No matching student found for deletion.'),
+    process_option(5).

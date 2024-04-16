@@ -1,0 +1,50 @@
+% Simple select
+studenten():-
+	findall(Rows, odbc_query(mydb, 'SELECT * FROM student', Rows), All),
+	writeln(All).
+
+% Insert Student
+insert_student(MatrikelNr, Vorname, Nachname) :-
+    atomic_list_concat(['INSERT INTO student(matrikelNr, vorname, nachname) VALUES (',MatrikelNr,', \'', Vorname, '\', \'', Nachname, '\')'], Query),
+    odbc_query(mydb, Query),
+    writeln('Student added successfully!'),
+    !.
+insert_student(MatrikelNr, Vorname, Nachname):-
+	writeln('Student couldn\'t be added !').
+	
+% Delete Student
+process_delete_student(1):-
+	writeln('Please type in the MatrikelNr. of the student to delete: '),
+	read(MatrikelNr),
+	delete_student_mitMatrikelNr(MatrikelNr).
+process_delete_student(2):-
+	writeln('Please type in the first name of the student to delete: '),
+	read(Vorname),
+	writeln('Please type in the last name of the student to delete: '),
+	read(Nachname),
+	delete_student_mitName(Vorname, Nachname).
+
+% Predicate to search for the student with the given name and return the ID
+search_student_mitName(Vorname, Nachname, MatrikelNr) :-
+    atomic_list_concat(['SELECT matrikelNr FROM student WHERE vorname LIKE \'%', Vorname, '%\' AND nachname LIKE \'%', Nachname, '%\''], Query),
+    odbc_query(mydb, Query, Rows),
+    Rows = row(MatrikelNr),
+    writeln('Search successful.'),
+    !. % Cut to prevent backtracking
+
+% Predicate to delete the student by ID
+delete_student_mitMatrikelNr(MatrikelNr) :-
+    atomic_list_concat(['DELETE FROM student WHERE matrikelNr = ', MatrikelNr], Query),
+    odbc_query(mydb, Query),
+    writeln('Deletion successful.'),
+    process_option(5).
+
+% Main predicate that combines the search and deletion operations
+delete_student_mitName(Vorname, Nachname) :-
+    search_student_mitName(Vorname, Nachname, MatrikelNr),
+    !,
+    delete_student_mitMatrikelNr(MatrikelNr),
+    process_option(5).
+delete_student_mitName(Vorname, Nachname) :-
+    writeln('No matching student found for deletion.'),
+    process_option(5).

@@ -1,0 +1,20 @@
+% Simple select
+autoren():-
+	findall(Rows, odbc_query(mydb, 'SELECT * FROM autor', Rows), All),
+	writeln(All).
+
+% Insert new Author
+insert_autor(Vorname, Nachname):-
+    atomic_list_concat(['INSERT INTO autor(vorname, nachname) VALUES (?, ?)'], Query),
+    odbc_prepare(mydb, Query, [varchar, varchar], Statement),
+    odbc_execute(Statement, [Vorname, Nachname]),
+    writeln('Author added successfully!').
+insert_autor(Vorname, Nachname):-
+	writeln('Author couldn\'t be added !').
+	
+% Delete Author
+delete_autor(AutorId) :-
+    atomic_list_concat(['DELETE FROM autor WHERE id = ', AutorId], Query),
+    odbc_query(mydb, Query),
+    writeln('Deletion successful.'),
+    process_option(5).
